@@ -34,10 +34,36 @@ def cifrar(mensaje,clave):
     return mensaje_cifrado
 
 
+
+def descifrar (mensaje,clave):
+    alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
+    'Q','R','S','T','U','V','W','X','Y','Z']
+
+    mensaje = mensaje.upper()
+    clave = clave.upper()
+
+    mensaje_descifrado = ""
+    
+    # Descifrado de cada letra da mensaxe
+    ind_clave = 0
+    for c_mens in mensaje:
+        if c_mens in alfabeto:
+            #Obtén a posición que ten o caracter no array de caracteres que lle pertenece según a clave  
+            ind_clave_letra = obtener_array_caracter(clave[ind_clave%len(clave)]).index(c_mens)
+            #Segun esa posición fai o descifrado no alfabeto orixinal
+            mensaje_descifrado += alfabeto[ind_clave_letra]
+            #Incrementa o valor da clave
+            ind_clave += 1
+
+    return mensaje_descifrado
+
+
+
 def main():
     parser = argparse.ArgumentParser(description='Cifrado vigenere')
     parser.add_argument('archivo', help='Archivo a cifrar')
     parser.add_argument('clave', help='La clave para el cifrado')
+    parser.add_argument('--descifrar', action='store_true', help='Si se indica, descifra el archivo')
 
     args = parser.parse_args()
 
@@ -48,11 +74,20 @@ def main():
     with open(args.archivo, 'r', encoding='utf-8') as f:
         mensaje = f.read()    
 
-    resultado = cifrar(mensaje, args.clave)
+    if args.descifrar:
+        resultado = descifrar(mensaje, args.clave)
+        archivo_salida = 'mensaje_descifrado.txt'
+        with open('mensaje_descifrado.txt', 'w', encoding='utf-8') as f:
+            f.write(resultado)
+        print(f"Mensaje descifrado guardado en 'mensaje_descifrado.txt'")
+    else:
+        resultado = cifrar(mensaje, args.clave)
+        archivo_salida = 'mensaje_cifrado.txt'
+        with open('mensaje_cifrado.txt', 'w', encoding='utf-8') as f:
+            f.write(resultado)
+        print(f"Mensaje cifrado guardado en 'mensaje_cifrado.txt'")    
     # Escribir el resultado en un nuevo archivo
-    with open('mensaje_cifrado.txt', 'w', encoding='utf-8') as f:
-        f.write(resultado)
-    print(f"Mensaje cifrado guardado en 'mensaje_cifrado.txt'")
+    
 
 
 if __name__ == "__main__":
