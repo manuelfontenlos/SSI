@@ -1,12 +1,13 @@
 import argparse
 
-def cifrar(mensaje, clave):
-    alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+def construir_alfabeto(clave):
     letras_unicas = []
 
     # Añado la clave a una lista de letras únicas
     for letra in clave.upper():
-        if letra not in letras_unicas and letra in alfabeto:
+        if letra not in letras_unicas:
             letras_unicas.append(letra)
 
     # Añado las letras del alfabeto que no estén en la clave
@@ -14,54 +15,40 @@ def cifrar(mensaje, clave):
         if letra not in letras_unicas:
             letras_unicas.append(letra)
 
-    # Desplazo las letras únicas según la longitud de la clave
-    long_clave = len(clave)
-    desplazamiento = long_clave % len(letras_unicas)
-    letras_unicas = letras_unicas[-desplazamiento:] + letras_unicas[:-desplazamiento] 
+    # Intercambio de letras basado en la clave
+    for i in range(len(letras_unicas)):
+        # Usamos el código ASCII de la letra correspondiente de la clave para determinar la posición de intercambio
+        swap_index = ord(clave[i % len(clave)]) % len(letras_unicas)
+        letras_unicas[i], letras_unicas[swap_index] = letras_unicas[swap_index], letras_unicas[i]
 
-    # Intercambio las letras en posiciones pares por las impares y viceversa
-    for i in range(0, len(letras_unicas) - 1, 2):
-        letras_unicas[i], letras_unicas[i + 1] = letras_unicas[i + 1], letras_unicas[i]
+    return letras_unicas
 
-    # Cifro el mensaje
-    mensaje_cifrado = ""
-    for letra in mensaje:
-        if letra in alfabeto:
+
+
+def cifrar(texto, clave):
+
+    nuestroalfabeto = construir_alfabeto(clave)
+
+    texto_cifrado = ""
+    for letra in texto:
             pos = alfabeto.index(letra)
-            mensaje_cifrado += letras_unicas[pos]
-        else:
-            mensaje_cifrado += letra
+            texto_cifrado += nuestroalfabeto[pos]
             
-    return mensaje_cifrado
+    return texto_cifrado
 
-def descifrar(mensaje_cifrado, clave):
-    alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    letras_unicas = []
 
-    for letra in clave.upper():
-        if letra not in letras_unicas and letra in alfabeto:
-            letras_unicas.append(letra)
+def descifrar(texto, clave):
 
-    for letra in alfabeto:
-        if letra not in letras_unicas:
-            letras_unicas.append(letra)
+    nuestroalfabeto = construir_alfabeto(clave)
+    
+    texto_descifrado = ""
+    for letra in texto:
+        pos = nuestroalfabeto.index(letra)
+        texto_descifrado += alfabeto[pos]
 
-    long_clave = len(clave)
-    desplazamiento = long_clave % len(letras_unicas)
-    letras_unicas = letras_unicas[-desplazamiento:] + letras_unicas[:-desplazamiento]
+    return texto_descifrado
 
-    for i in range(0, len(letras_unicas) - 1, 2):
-        letras_unicas[i], letras_unicas[i + 1] = letras_unicas[i + 1], letras_unicas[i]
 
-    mensaje_descifrado = ""
-    for letra in mensaje_cifrado:
-        if letra in letras_unicas:
-            pos = letras_unicas.index(letra)
-            mensaje_descifrado += alfabeto[pos]
-        else:
-            mensaje_descifrado += letra  # Si no está en el alfabeto, añadir la letra original
-
-    return mensaje_descifrado
 
 def main():
     parser = argparse.ArgumentParser(description='Cifrado y descifrado textos.')
@@ -78,15 +65,15 @@ def main():
     if args.accion == 'cifrar':
         resultado = cifrar(mensaje, args.clave)
         # Escribir el resultado en un nuevo archivo
-        with open('mensaje_cifrado.txt', 'w', encoding='utf-8') as f:
+        with open('texto_cifrado.txt', 'w', encoding='utf-8') as f:
             f.write(resultado)
-        print(f"Mensaje cifrado guardado en 'mensaje_cifrado.txt'")
+        print(f"Texto cifrado guardado en 'texto_cifrado.txt'")
     elif args.accion == 'descifrar':
         resultado = descifrar(mensaje, args.clave)
         # Escribir el resultado en un nuevo archivo
-        with open('mensaje_descifrado.txt', 'w', encoding='utf-8') as f:
+        with open('texto_descifrado.txt', 'w', encoding='utf-8') as f:
             f.write(resultado)
-        print(f"Mensaje descifrado guardado en 'mensaje_descifrado.txt'")
+        print(f"Texto descifrado guardado en 'texto_descifrado.txt'")
 
 if __name__ == "__main__":
     main()
