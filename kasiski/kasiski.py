@@ -14,6 +14,7 @@ frecuencias = []
 
 maxletter = {}
 maxletter2 = {}
+maxletter3 = {}
 
 def buscar_cuatrigramas(text):
     for index in range(0,len(text)-4):
@@ -71,7 +72,7 @@ def dividir_fragmentos(text,mcd):
         fragmentos.append([])
 
     for i in range(mcd):
-        for j in range(i,l,5):
+        for j in range(i,l,mcd):
             if j < l:
                 fragmentos[i].append(text[j])
 
@@ -108,6 +109,14 @@ def analisis_fragmentos(mcd):
                 if frecuencias[i][j] > maxfrec:
                     maxletter2[i] = str(j)
                     maxfrec = frecuencias[i][j]
+    
+    for i in range(mcd):
+        maxfrec=0
+        for j in frecuencias[i].keys():
+            if str(j) != maxletter[i] and str(j) != maxletter2[i]:
+                if frecuencias[i][j] > maxfrec:
+                    maxletter3[i] = str(j)
+                    maxfrec = frecuencias[i][j]
 
 def main():
     parser = argparse.ArgumentParser(description='Análisis de cifrado vigenere con kasiski')
@@ -126,9 +135,9 @@ def main():
 
     dividir_fragmentos(mensaje,mcd)
     analisis_fragmentos(mcd)
-    
+
     for i in range(mcd):
-        print(f"Las letras más repetidas en el fragmento {i} son las letras: {maxletter[i]}, {maxletter2[i]}")
+        print(f"Las letras más repetidas en el fragmento {i} son las letras: {maxletter[i]}, {maxletter2[i]}, {maxletter3[i]}")
 
 
 if __name__ == "__main__":
