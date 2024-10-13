@@ -92,7 +92,10 @@ def analisis_fragmentos(mcd):
             for letter in fragmentos[i]: # Coge las letras del subcriptograma
                 if letter == key: # Si coinciden se suma 1
                     frecuencias[i][key] += 1
-
+    
+    for i in range(mcd):
+        for j in frecuencias[i].keys():
+            frecuencias[i][j] = (frecuencias[i][j] / 26)
 
     #Calculamos la letra más repetida en el fragmento
     for i in range(mcd):
@@ -119,6 +122,9 @@ def analisis_fragmentos(mcd):
                     maxfrec = frecuencias[i][j]
 
 def main():
+    alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
+    'Q','R','S','T','U','V','W','X','Y','Z']
+
     parser = argparse.ArgumentParser(description='Análisis de cifrado vigenere con kasiski')
     parser.add_argument('archivo', help='El archivo de texto que contiene el texto')
 
@@ -137,8 +143,12 @@ def main():
     analisis_fragmentos(mcd)
 
     for i in range(mcd):
-        print(f"Las letras más repetidas en el fragmento {i} son las letras: {maxletter[i]}, {maxletter2[i]}, {maxletter3[i]}")
+        print(f"Las letras más repetidas en el fragmento {i+1} son las letras: {maxletter[i]}, {maxletter2[i]}, {maxletter3[i]}")
 
+    for i in range(mcd):
+        print(f"Las frecuencias de las letras del fragmento {i+1}:")
+        for j in frecuencias[i].keys():
+            print(f"{j}:{frecuencias[i][j]:.2f}")
 
 if __name__ == "__main__":
     main()
