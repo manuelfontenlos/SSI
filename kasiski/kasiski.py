@@ -8,42 +8,47 @@ trihashmapcount = {}
 cuatrihashmapdiff = {}
 trihashmapdiff = {}
 
+# Inicializa el diccionario para contar los múltiplos
+mcdhashmap = {i: 0 for i in range(2, 7)}
 
 def buscar_cuatrigramas(text):
-    for index in range(len(text)-3):
-    
+    for index in range(0,len(text)-4):
         count = 0
-        cuatrigram = text[index:index+3]
-        poscuatrigram = index+3
-        for auxindex in range(len(text)-3):
+        cuatrigram = text[index:index+4]
+        for auxindex in range(index+4, len(text)-4):
             if auxindex != 0:
-                auxcuatrigram = text[auxindex:auxindex+3]
+                auxcuatrigram = text[auxindex:auxindex+4]
                 if cuatrigram == auxcuatrigram:
                     count+=1
-                    cuatrihashmapdiff.add(cuatrigram)
-                    cuatrihashmapcount.add(cuatrigram)
-                    cuatrihashmapcount[cuatrihashmapcount] = count
-                    cuatrihashmapdiff[cuatrigram] = auxindex - poscuatrigram
-                    print(f"Cuatrigrama {cuatrigram} repetido {count} veces, diferencia {auxindex-poscuatrigram}")
+                    cuatrihashmapcount[cuatrigram] = count
+                    cuatrihashmapdiff[cuatrigram] = auxindex - index
+                    print(f"Cuatrigrama {cuatrigram} repetido {count} veces, diferencia {auxindex-index}")
 
 
 def buscar_trigramas(text):
-    for index in range(len(text)-2):
-    
+    for index in range(0,len(text)-3):
         count = 0
-        trigram = text[index:index+2]
-        postrigram = index+2
-        for auxindex in range(len(text)-2):
+        trigram = text[index:index+3]
+        for auxindex in range(index+3, len(text)-3):
             if auxindex != 0:
-                auxtrigram = text[auxindex:auxindex+2]
+                auxtrigram = text[auxindex:auxindex+3]
                 if trigram == auxtrigram:
                     count+=1
-                    trihashmapdiff.add(trigram)
-                    trihashmapcount.add(trigram)
-                    trihashmapcount[trihashmapcount] = count
-                    trihashmapdiff[trigram] = auxindex - postrigram
-                    print(f"Trigrama {trigram} repetido {count} veces, diferencia {auxindex-postrigram}")
+                    trihashmapcount[trigram] = count
+                    trihashmapdiff[trigram] = auxindex - index
+                    print(f"Trigrama {trigram} repetido {count} veces, diferencia {auxindex-index}")
 
+
+def calcular_mcd():
+    for i in range(2,7):
+        for cuatrigram in cuatrihashmapdiff:
+            if(cuatrihashmapdiff[cuatrigram] % i == 0):
+                mcdhashmap[i] += 1
+    for i in range(2,7):
+        for trigram in trihashmapdiff:
+            if(trihashmapdiff[trigram] % i == 0):
+                mcdhashmap[i] += 1
+            
 
 def main():
     parser = argparse.ArgumentParser(description='Análisis de cifrado vigenere con kasiski')
@@ -53,7 +58,14 @@ def main():
 
     # Leer el contenido del archivo
     with open(args.archivo, 'r', encoding='utf-8') as f:
-        mensaje = f.read()         
+        mensaje = f.read()
 
     buscar_cuatrigramas(mensaje)
     buscar_trigramas(mensaje)
+    calcular_mcd()
+
+    for i in range(2,7):
+        print(f"{i}: {mcdhashmap[i]}")
+
+if __name__ == "__main__":
+    main()
