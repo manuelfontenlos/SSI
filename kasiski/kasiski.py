@@ -126,7 +126,7 @@ def main():
     'Q','R','S','T','U','V','W','X','Y','Z']
 
     parser = argparse.ArgumentParser(description='Análisis de cifrado vigenere con kasiski')
-    parser.add_argument('archivo', help='El archivo de texto que contiene el texto')
+    parser.add_argument('archivo', help='El archivo de texto que contiene el texto cifrado')
 
     args = parser.parse_args()
 
@@ -141,6 +141,8 @@ def main():
 
     dividir_fragmentos(mensaje,mcd)
     analisis_fragmentos(mcd)
+
+    print(f"La clave usada para cifrar el texto es de {mcd} cifras")
 
     for i in range(mcd):
         print(f"Las letras más repetidas en el fragmento {i+1} son las letras: {maxletter[i]}, {maxletter2[i]}, {maxletter3[i]}")
