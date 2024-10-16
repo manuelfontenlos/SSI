@@ -81,21 +81,17 @@ def dividir_fragmentos(text,mcd):
 def analisis_fragmentos(mcd):
 
     for i in range(mcd):
-        frecuencias.append({'A': 0.0, 'B': 0.0, 'C': 0.0, 'D': 0.0, 
-            'E': 0.0, 'F': 0.0, 'G': 0.0, 'H': 0.0, 'I': 0.0, 'J': 0.0, 
-            'K': 0.0, 'L': 0.0, 'M': 0.0, 'N': 0.0, 'O': 0.0, 'P': 0.0, 
-            'Q': 0.0, 'R': 0.0, 'S': 0.0, 'T': 0.0, 'U': 0.0, 'V': 0.0, 
-            'W': 0.0, 'X': 0.0, 'Y': 0.0, 'Z': 0.0}) 
+        frecuencias.append({'A': 0, 'B': 0, 'C': 0, 'D': 0, 
+            'E': 0, 'F': 0, 'G': 0, 'H': 0, 'I': 0, 'J': 0, 
+            'K': 0, 'L': 0, 'M': 0, 'N': 0, 'O': 0, 'P': 0, 
+            'Q': 0, 'R': 0, 'S': 0, 'T': 0, 'U': 0, 'V': 0, 
+            'W': 0, 'X': 0, 'Y': 0, 'Z': 0}) 
     
     for i in range(mcd):
         for key in frecuencias[i].keys(): # Coge de la A-Z
             for letter in fragmentos[i]: # Coge las letras del subcriptograma
                 if letter == key: # Si coinciden se suma 1
                     frecuencias[i][key] += 1
-    
-    for i in range(mcd):
-        for j in frecuencias[i].keys():
-            frecuencias[i][j] = (frecuencias[i][j] / 26)
 
     #Calculamos la letra más repetida en el fragmento
     for i in range(mcd):
@@ -121,6 +117,7 @@ def analisis_fragmentos(mcd):
                     maxletter3[i] = str(j)
                     maxfrec = frecuencias[i][j]
 
+
 def main():
     alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
     'Q','R','S','T','U','V','W','X','Y','Z']
@@ -145,10 +142,11 @@ def main():
     print(f"La clave usada para cifrar el texto es de {mcd} cifras")
 
     for i in range(mcd):
-        print(f"Las letras más repetidas en el fragmento {i+1} son las letras: {maxletter[i]}, {maxletter2[i]}, {maxletter3[i]}")
+        print(f"La letra de la posición {i+1} de la clave es una de las 3 siguientes"
+         f": {maxletter[i]}, {maxletter2[i]}, {maxletter3[i]}")
 
     for i in range(mcd):
-        print(f"Las frecuencias de las letras del fragmento {i+1}:")
+        print(f"El numero de aparicion de las letras del fragmento {i+1}:")
         for j in frecuencias[i].keys():
             print(f"{j}:{frecuencias[i][j]:.2f}")
 
