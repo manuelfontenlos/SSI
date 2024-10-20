@@ -42,7 +42,8 @@ def buscar_trigramas(text):
                     #print(f"Trigrama {trigram} repetido {count} veces, diferencia {auxindex-index}")
 
 
-def calcular_mcd():
+def calcular_mcd(text):
+    l = len(text)
     for i in range(2,8):
         for cuatrigram in cuatrihashmapdiff:
             if(cuatrihashmapdiff[cuatrigram] % i == 0):
@@ -51,9 +52,10 @@ def calcular_mcd():
             if(trihashmapdiff[trigram] % i == 0):
                 mcdhashmap[i] += 1
 
-    #print("La longitud de la clave es el máximo común divisor más repetido:")    
-    #for i in range(2,8):
-        #print(f"{i}: {mcdhashmap[i]}")
+    print("La longitud de la clave es el máximo común divisor más repetido:")    
+    for i in range(2,8):
+        print(f"{i}: {mcdhashmap[i]}")
+        print(f"{i}: {mcdhashmap[i] / l}")
 
     max=0
     max_mcd=0
@@ -61,6 +63,12 @@ def calcular_mcd():
         if mcdhashmap[i]>max:
             max=mcdhashmap[i]
             max_mcd=i
+
+    if mcdhashmap[6]/l  > 0.125 :
+        max_mcd = 6
+
+    if mcdhashmap[4]/l  > 0.15 :
+        max_mcd = 4         
     
     return max_mcd
 
@@ -134,7 +142,7 @@ def main():
     buscar_cuatrigramas(mensaje)
     buscar_trigramas(mensaje)
     
-    mcd = calcular_mcd()
+    mcd = calcular_mcd(mensaje)
 
     dividir_fragmentos(mensaje,mcd)
     analisis_fragmentos(mcd)
